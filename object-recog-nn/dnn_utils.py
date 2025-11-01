@@ -117,3 +117,39 @@ def linear_and_activation_forward(A_prev, W, b, activation):
     cache = (linear_cache, activation_cache)
 
     return A, cache
+
+
+def l_layer_model_forward(X, parameters):
+    """Implements forward propagation for all L layers of a DNN.
+
+    For simplicity, this function assumes that the first L-1 layers
+    utilise ReLu activation, and the output layer performs sigmoid.
+
+    Args:
+        X: A numpy array representing the input feature matrix
+        Dimensions are (# input features, # training examples m)
+        parameters: The dictionary output of initialize_parameters_deep()
+
+    Returns:
+        AL: Activation values from the output (Lth) layer
+        caches: List of caches containing every cache of
+                linear_and_activation_forward() (there are L of them,
+                indexed from 0 to L-1)
+    """
+    caches = []
+    A = X
+    L = len(parameters) // 2
+
+    for l in range(1, L):  # noqa: E741
+        A_prev = A
+        A, cache = linear_and_activation_forward(
+            A_prev, parameters["W" + str(l)], parameters["b" + str(l)], "relu"
+        )
+        caches.append(cache)
+
+    AL, cache = linear_and_activation_forward(
+        A, parameters["W" + str(L)], parameters["b" + str(L)], "sigmoid"
+    )
+    caches.append(cache)
+
+    return AL, caches
