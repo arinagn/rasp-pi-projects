@@ -1,6 +1,7 @@
 """Helper functions for building an L-layer Neural Network from scratch with numpy."""
 
 import numpy as np
+import copy
 
 np.random.seed(42)
 
@@ -300,7 +301,7 @@ def l_layer_model_backward(AL, Y, caches):
     grads["db" + str(L)] = db_temp
 
     # Loop from l=L-2 to l=0
-    for l in reversed(range(L - 1)): # noqa: E741
+    for l in reversed(range(L - 1)):  # noqa: E741
         current_cache = caches[l]
         dA_prev_temp, dW_temp, db_temp = linear_and_activation_backward(
             grads["dA" + str(l + 1)], current_cache, activation="relu"
@@ -310,3 +311,37 @@ def l_layer_model_backward(AL, Y, caches):
         grads["db" + str(l + 1)] = db_temp
 
     return grads
+
+
+def update_parameters(params, grads, learning_rate):
+    """Updates parameters using gradient descent.
+
+    For parameters in each layer l, the update rule is:
+    W^[l] = W^[l] - learning_rate * dW^[l]
+    b^[l] = b^[l] - learning_rate * db^[l]
+    => moving in the direction of steepest negative gradient.
+
+    Args:
+        params: A dictionary containing parameters
+        grads: A dictionary containing gradients,
+               output of l_layer_model_backward()
+        learning_rate: A scalar affecting the magnitude of each
+                       update in gradient descent.
+
+    Returns:
+        parameters: A dictionary containing your updated parameters
+                    parameters["W" + str(l)] = ...
+                    parameters["b" + str(l)] = ...
+    """
+    parameters = copy.deepcopy(params)
+    L = len(parameters) // 2
+
+    for l in range(L):  # noqa: E741
+        parameters["W" + str(l + 1)] = (
+            parameters["W" + str(l + 1)] - learning_rate * grads["dW" + str(l + 1)]
+        )
+        parameters["b" + str(l + 1)] = (
+            parameters["b" + str(l + 1)] - learning_rate * grads["db" + str(l + 1)]
+        )
+
+    return parameters
