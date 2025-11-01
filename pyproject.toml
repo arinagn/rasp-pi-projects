@@ -5,4 +5,7 @@ requires-python = ">=3.10"
 line-length = 89
 
 [tool.ruff.lint]
-extend-select = ["E501"]
+extend-select = ["E501", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
