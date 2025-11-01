@@ -5,6 +5,30 @@ import numpy as np
 np.random.seed(42)
 
 
+def sigmoid(Z):
+    """Computes the sigmoid activation function.
+
+    Args:
+        Z: Input numpy array.
+
+    Returns:
+        The sigmoid of Z, where each element is 1 / (1 + e^(-z)).
+    """
+    return 1 / (1 + np.exp(-Z))
+
+
+def relu(Z):
+    """Computes the ReLU (Rectified Linear Unit) activation function.
+
+    Args:
+        Z: Input numpy array.
+
+    Returns:
+        The ReLU of Z, where negative values are replaced with 0.
+    """
+    return np.maximum(0, Z)
+
+
 def initialize_parameters_l_layers(layer_dims):
     """Initialises weight and bias parameters for each layer l in the network.
 
