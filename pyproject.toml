@@ -1,5 +1,16 @@
 [project]
+name = "rasp-pi-projects"
+version = "0.0.1"
 requires-python = ">=3.10"
+dependencies = [
+    "numpy"
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.14.3"
+]
+
 
 [tool.ruff]
 line-length = 89
