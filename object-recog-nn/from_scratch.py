@@ -10,11 +10,15 @@ from dnn_utils import (
     update_parameters,
 )
 
-LAYER_DIMS = [12288, 20, 7, 5, 1]
+from image_preprocess import create_data
+import cv2
+
+
+LAYER_DIMS = [12288, 200, 1]
 
 
 def L_layer_nn_model(
-    X, Y, layers_dims, learning_rate=0.0075, num_iterations=3000, print_cost=False
+    X, Y, layers_dims, learning_rate=0.0075, num_iterations=10000, print_cost=False
 ):
     """Implements a L-layer neural network: [LINEAR->RELU]*(L-1)->LINEAR->SIGMOID.
 
@@ -50,3 +54,36 @@ def L_layer_nn_model(
             costs.append(cost)
 
     return parameters, costs
+
+
+def predict(image, parameters):
+    image = cv2.resize(image, (IMG_SIZE, IMG_SIZE)).flatten().reshape(-1, 1) / 255.
+    A2, _ = linear_and_activation_forward(image, parameters)
+    return 1 if A2 > 0.5 else 0
+
+
+if __name__=="__main__":
+    X, Y = create_data(folder_pos="data/pom", folder_neg="data/nopom")
+    print(X.shape)
+    print(Y.shape)
+
+    params, costs = L_layer_nn_model(
+        X=X,
+        Y=Y,
+        layers_dims=LAYER_DIMS,
+        print_cost=True,
+    )
+
+    print(params)
+
+    cam = cv2.VideoCapture(0)
+    while True:
+        ret, frame = cam.read()
+        if not ret: break
+        pred = predict(frame, parameters)
+        label = "POM" if pred == 1 else "NO POM"
+        cv2.putText(frame, label, (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
+        cv2.imshow("Pi Camera Classifier", frame)
+        if cv2.waitKey(1) == ord('q'): break
+    cam.release()
+    cv2.destroyAllWindows()

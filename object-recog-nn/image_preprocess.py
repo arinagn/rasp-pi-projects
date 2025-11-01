@@ -24,6 +24,11 @@ def create_data(folder_pos, folder_neg):
     X_neg, Y_neg = load_images(folder_neg, 0)
     X = np.concatenate((X_pos, X_neg), axis=0).T
     X = X / 255.0
-    Y = np.concatenate((Y_pos, Y_neg), axis=0).reshape[1, -1]
+    Y = np.concatenate((Y_pos, Y_neg), axis=0).reshape(1, -1)
 
     return X, Y
+
+if __name__=="__main__":
+    X, Y = create_data(folder_pos="data/pom", folder_neg="data/nopom")
+    print(X.shape)
+    print(Y.shape)

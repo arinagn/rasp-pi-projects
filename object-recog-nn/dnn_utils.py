@@ -15,7 +15,10 @@ def _sigmoid(Z):
     Returns:
         The sigmoid of Z, where each element is 1 / (1 + e^(-z)).
     """
-    return 1 / (1 + np.exp(-Z))
+    A = 1 / (1 + np.exp(-Z))
+    cache = Z
+    
+    return A, cache
 
 
 def _relu(Z):
@@ -27,7 +30,10 @@ def _relu(Z):
     Returns:
         The ReLU of Z, where negative values are replaced with 0.
     """
-    return np.maximum(0, Z)
+    A = np.maximum(0, Z)
+    cache = Z
+
+    return A, cache
 
 
 def _sigmoid_backward(dA, cache):
