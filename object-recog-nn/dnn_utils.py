@@ -264,3 +264,49 @@ def linear_and_activation_backward(dA, cache, activation):
         dA_prev, dW, db = linear_backward(dZ, linear_cache)
 
     return dA_prev, dW, db
+
+
+def l_layer_model_backward(AL, Y, caches):
+    """Implements combined [linear->ReLu]*(L-1) -> linear->sigmoid backward propagation.
+
+    Args:
+        AL: The predicted probability vector, output of the forward propagation,
+            i.e. l_layer_model_forward
+        Y: True label vector (0 or 1)
+        caches: A list of caches containing:
+            - Every cache of linear_and_activation_forward() with "relu"
+              (it's caches[l], for l in range(L-1) i.e l = 0...L-2)
+            - The cache of linear_and_activation_forward() with "sigmoid"
+              (it's caches[L-1])
+
+    Returns:
+        grads: A dictionary contaning gradients
+             grads["dA" + str(l)] = ...
+             grads["dW" + str(l)] = ...
+             grads["db" + str(l)] = ...
+    """
+    grads = {}
+    L = len(caches)  # number of layers
+    Y = Y.reshape(AL.shape)  # to make Y the same shape as AL
+
+    dAL = -(np.divide(Y, AL) - np.divide(1 - Y, 1 - AL))
+
+    current_cache = caches[L - 1]
+    dA_prev_temp, dW_temp, db_temp = linear_and_activation_backward(
+        dAL, current_cache, activation="sigmoid"
+    )
+    grads["dA" + str(L - 1)] = dA_prev_temp
+    grads["dW" + str(L)] = dW_temp
+    grads["db" + str(L)] = db_temp
+
+    # Loop from l=L-2 to l=0
+    for l in reversed(range(L - 1)): # noqa: E741
+        current_cache = caches[l]
+        dA_prev_temp, dW_temp, db_temp = linear_and_activation_backward(
+            grads["dA" + str(l + 1)], current_cache, activation="relu"
+        )
+        grads["dA" + str(l)] = dA_prev_temp
+        grads["dW" + str(l + 1)] = dW_temp
+        grads["db" + str(l + 1)] = db_temp
+
+    return grads
