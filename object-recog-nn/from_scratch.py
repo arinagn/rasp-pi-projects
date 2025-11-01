@@ -30,3 +30,30 @@ def initialize_parameters_l_layers(layer_dims):
         parameters["b" + str(l)] = np.zeros((layer_dims[l], 1))
 
     return parameters
+
+
+def linear_forward(A, W, b):
+    """Implements the linear step of a layer's forward propagation.
+
+    For a layer l, and all m training examples (vectorised), performs:
+    Z^[l] = W^[l] A^[l-1] + b^[l]
+
+    Args:
+        A: Activations from previous layer (or input data, i.e. A^[0] = X)
+           Dimensions are (# units in previous layer, # training examples)
+        W: Weights matrix - a numpy array of a layer l's weights
+           Dimensions are (# units in current layer, # units in previous layer)
+        b: Bias vector - a numpy array of a layer l's biases
+           Dimensions are (# units in the current layer, 1). If all m training
+           examples are being used, Python performs broadcasting to compute
+           element-wise sum between the bias and each of m training examples.
+
+    Returns:
+        Z: The input of the activation function, also called pre-activation parameter
+        cache: A python tuple containing "A", "W" and "b";
+               stored for computing the backward pass efficiently
+    """
+    Z = np.dot(W, A) + b
+    cache = (A, W, b)
+
+    return Z, cache
