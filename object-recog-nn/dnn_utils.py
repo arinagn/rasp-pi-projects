@@ -153,3 +153,26 @@ def l_layer_model_forward(X, parameters):
     caches.append(cache)
 
     return AL, caches
+
+
+def compute_cost(AL, Y):
+    """Implements the cost function (average loss across m training examples).
+
+    This is needed for the gradient descent process in backward propagation.
+
+    Args:
+        AL: Probability vector corresponding to your label predictions;
+            Dimensions are (1, # training examples m)
+        Y: A vector containing the true labels (0 / 1)
+            Dimensions are (1, # training examples m)
+
+    Returns:
+        The binary cross-entropy (log loss) cost.
+    """
+    m = Y.shape[1]
+    cost = -np.sum(np.dot(Y, np.log(AL).T) + np.dot((1 - Y), np.log(1 - AL).T)) / m
+
+    # ensure cost's shape is as expected
+    cost = np.squeeze(cost)
+
+    return cost
