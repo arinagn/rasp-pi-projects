@@ -4,6 +4,9 @@ requires-python = ">=3.10"
 [tool.ruff]
 line-length = 89
 
+[tool.ruff.format]
+docstring-code-format = true
+
 [tool.ruff.lint]
 # set of enabled rules controlled via select, extend-select, ignore
 extend-select = ["E501", "D"]
