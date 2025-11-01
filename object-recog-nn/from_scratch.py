@@ -13,12 +13,12 @@ from dnn_utils import (
 LAYER_DIMS = [12288, 20, 7, 5, 1]
 
 
-def L_layer_model(
+def L_layer_nn_model(
     X, Y, layers_dims, learning_rate=0.0075, num_iterations=3000, print_cost=False
 ):
     """Implements a L-layer neural network: [LINEAR->RELU]*(L-1)->LINEAR->SIGMOID.
 
-    Arguments:
+    Args:
         X: Input feature matrix of shape (n_x, # training examples)
         Y: True label vector (0 / 1) of shape (1, # training examples)
         layers_dims: List containing the input size and each layer size of length
