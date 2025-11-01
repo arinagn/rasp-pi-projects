@@ -5,7 +5,7 @@ import numpy as np
 np.random.seed(42)
 
 
-def sigmoid(Z):
+def _sigmoid(Z):
     """Computes the sigmoid activation function.
 
     Args:
@@ -17,7 +17,7 @@ def sigmoid(Z):
     return 1 / (1 + np.exp(-Z))
 
 
-def relu(Z):
+def _relu(Z):
     """Computes the ReLU (Rectified Linear Unit) activation function.
 
     Args:
@@ -81,3 +81,39 @@ def linear_forward(A, W, b):
     cache = (A, W, b)
 
     return Z, cache
+
+
+def linear_and_activation_forward(A_prev, W, b, activation):
+    """Implements forward propagation for layer l.
+
+    Combines the linear step perfomed in a unit with the non-linear activation.
+
+    Args:
+        A_prev: Activations from previous layer (or input data, i.e. A^[0] = X)
+           Dimensions are (# units in previous layer, # training examples)
+        W: Weights matrix - a numpy array of a layer l's weights
+           Dimensions are (# units in current layer, # units in previous layer)
+        b: Bias vector - a numpy array of a layer l's biases
+           Dimensions are (# units in the current layer, 1). If all m training
+           examples are being used, Python performs broadcasting to compute
+           element-wise sum between the bias and each of m training examples.
+        activation: A string indicating the type of activation to be used in this
+                    layer, e.g. "sigmoid" or "relu"
+
+    Returns:
+    A: A numpy array containing the output of the activation function,
+       also called the post-activation value.
+    cache: A tuple containing "linear_cache" and "activation_cache";
+           stored for computing the backward pass efficiently.
+    """
+    Z, linear_cache = linear_forward(A_prev, W, b)
+
+    if activation == "sigmoid":
+        A, activation_cache = _sigmoid(Z)
+
+    elif activation == "relu":
+        A, activation_cache = _relu(Z)
+
+    cache = (linear_cache, activation_cache)
+
+    return A, cache
