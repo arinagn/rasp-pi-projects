@@ -1,15 +1,13 @@
-"""Contains helper functions for building an L-layer Neural Network from scratch with numpy."""
+"""Helper functions for building an L-layer Neural Network from scratch with numpy."""
 
 import numpy as np
-import matplotlib.pyplot as plt
-import copy
 
 np.random.seed(42)
 
 
 def initialize_parameters_l_layers(layer_dims):
-    """
-    Initialises weight and bias parameters for each layer l in the network.
+    """Initialises weight and bias parameters for each layer l in the network.
+
     Args:
         layer_dims: An array containing the dimensions of each layer in our network.
                     e.g. (n_x, n_h, n_y) where n_x denotes the number of units in the 
@@ -22,12 +20,12 @@ def initialize_parameters_l_layers(layer_dims):
                     Wl - weight matrix of shape (layer_dims[l], layer_dims[l-1])
                     bl - bias vector of shape (layer_dims[l], 1)
     """
-    
     parameters = {}
     L = len(layer_dims) # number of layers in the network
 
-    for l in range(1, L):
+    for l in range(1, L): # noqa: E741
         parameters["W" + str(l)] = np.random.randn(layer_dims[l], layer_dims[l-1]) * 0.01
         parameters["b" + str(l)] = np.zeros((layer_dims[l], 1))
 
     return parameters
+
