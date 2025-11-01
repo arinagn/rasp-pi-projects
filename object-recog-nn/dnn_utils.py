@@ -29,6 +29,38 @@ def _relu(Z):
     return np.maximum(0, Z)
 
 
+def _sigmoid_backward(dA, cache):
+    """Computes the backward propagation for a single sigmoid unit.
+
+    Args:
+        dA: ND array representing matrix of post-activation gradients.
+        cache: Z stored during forward propagation.
+
+    Returns:
+        Matrix of gradients of the cost with respect to Z.
+    """
+    Z = cache
+    s = 1 / (1 + np.exp(-Z))
+    dZ = dA * s * (1 - s)
+    return dZ
+
+
+def _relu_backward(dA, cache):
+    """Computes the backward propagation for a single ReLU unit.
+
+    Args:
+        dA: ND array representing matrix of post-activation gradients.
+        cache: Z stored during forward propagation.
+
+    Returns:
+        Matrix of gradients of the cost with respect to Z.
+    """
+    Z = cache
+    dZ = np.array(dA, copy=True)
+    dZ[Z <= 0] = 0
+    return dZ
+
+
 def initialize_parameters_l_layers(layer_dims):
     """Initialises weight and bias parameters for each layer l in the network.
 
@@ -176,3 +208,59 @@ def compute_cost(AL, Y):
     cost = np.squeeze(cost)
 
     return cost
+
+
+def linear_backward(dZ, cache):
+    """Implements the linear step of backward propagation for a single layer l.
+
+    Args:
+        dZ: Gradient matrix of the cost wrt to the linear output of current layer l
+        cache: Tuple of (A_prev, W, b) from the forward propagation of current layer l
+
+    Returns:
+        dA_prev: Gradient matrix of the cost wrt to activation of the previous layer l-1
+                 Same dimensions as A_prev.
+        dW: Gradient matrix of the cost wrt W of current layer l
+            Same dimensions as W
+        db: Gradient vector of the cost with respect to b of current layer l,
+            Same dimensions as b
+    """
+    A_prev, W, b = cache
+    m = A_prev.shape[1]
+
+    dW = np.dot(dZ, A_prev.T) / m
+
+    # The axis you name disappears after summing
+    db = np.sum(dZ, axis=1, keepdims=True) / m
+    dA_prev = np.dot(W.T, dZ)
+
+    return dA_prev, dW, db
+
+
+def linear_and_activation_backward(dA, cache, activation):
+    """Implements the combined linear + activationg steps for backward propagation.
+
+    Arguments:
+    dA: Post-activation gradient for current layer l
+    cache: Tuple of (linear_cache, activation_cache) stored for
+           computing backward propagation efficiently
+    activation: A string representing the activation to be used for this layer,
+                e.g. "sigmoig" or "relu"
+
+    Returns:
+    dA_prev: Gradient of the cost wrt the activation of the previous layer l-1
+             Same dimensions as A_prev
+    dW: Gradient of the cost wrt W of current layer l, same dims as W
+    db: Gradient of the cost wrt b of current layer l, same dims as b
+    """
+    linear_cache, activation_cache = cache
+
+    if activation == "relu":
+        dZ = _relu_backward(dA, activation_cache)
+        dA_prev, dW, db = linear_backward(dZ, linear_cache)
+
+    elif activation == "sigmoid":
+        dZ = _sigmoid_backward(dA, activation_cache)
+        dA_prev, dW, db = linear_backward(dZ, linear_cache)
+
+    return dA_prev, dW, db
