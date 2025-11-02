@@ -63,6 +63,7 @@ if __name__ == "__main__":
         X=X,
         Y=Y,
         layers_dims=LAYER_DIMS,
+        learning_rate=0.1,
         print_cost=True,
     )
     print(params)
