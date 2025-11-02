@@ -3,7 +3,9 @@ name = "rasp-pi-projects"
 version = "0.0.1"
 requires-python = ">=3.10"
 dependencies = [
-    "numpy"
+    "opencv-python==4.12.0.88",
+    "picamera2==0.3.31",
+    "numpy",
 ]
 
 [project.optional-dependencies]
