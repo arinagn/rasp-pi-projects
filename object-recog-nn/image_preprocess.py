@@ -7,8 +7,19 @@ import os
 
 IMG_SIZE = 64
 
+
 def load_images(folder, label):
-    """Loads images from a given folder, resizes, flattens."""
+    """Loads images from a given folder, resizes, flattens.
+
+    Args:
+        folder: Path to the directory containing the images.
+        label: Boolean representing whether the image belong to
+               the positive class (1) or negative class (0).
+
+    Returns:
+        X: An ND array containing the input feature matrix.
+        Y: A numpy array of true labels.
+    """
     X, Y = [], []
     for file in os.listdir(folder):
         img = cv2.imread(os.path.join(folder, file))
@@ -27,8 +38,3 @@ def create_data(folder_pos, folder_neg):
     Y = np.concatenate((Y_pos, Y_neg), axis=0).reshape(1, -1)
 
     return X, Y
-
-if __name__=="__main__":
-    X, Y = create_data(folder_pos="data/pom", folder_neg="data/nopom")
-    print(X.shape)
-    print(Y.shape)
