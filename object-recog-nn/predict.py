@@ -22,7 +22,6 @@ def predict(image, parameters):
 
 
 if __name__ == "__main__":
-
     # Load learnt model parameters
     model = np.load("nn_params.npz")
     params = {key: model[key] for key in model}
@@ -40,9 +39,11 @@ if __name__ == "__main__":
             frame = picam2.capture_array()
             print(frame.shape)
             pred = predict(frame, params)
-            label = "POM" if pred==1 else "NO POM"
+            label = "POM" if pred == 1 else "NO POM"
 
-            cv2.putText(frame, label, (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(
+                frame, label, (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2
+            )
             cv2.imshow("Classifier", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
             if cv2.waitKey(1) == ord("q"):
