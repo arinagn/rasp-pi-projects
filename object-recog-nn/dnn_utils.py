@@ -5,6 +5,8 @@ import copy
 
 np.random.seed(42)
 
+LAYER_DIMS = [12288, 20, 7, 5, 1]
+
 
 def _sigmoid(Z):
     """Computes the sigmoid activation function.

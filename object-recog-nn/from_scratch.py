@@ -8,11 +8,10 @@ from dnn_utils import (
     compute_cost,
     l_layer_model_backward,
     update_parameters,
+    LAYER_DIMS,
 )
 
 from image_preprocess import create_data
-
-LAYER_DIMS = [12288, 20, 7, 5, 1]
 
 
 def L_layer_nn_model(
