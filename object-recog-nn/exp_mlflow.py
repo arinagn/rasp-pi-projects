@@ -6,6 +6,7 @@ import os
 import numpy as np
 import time
 from from_scratch import L_layer_nn_model
+from image_preprocess import create_data
 
 
 def run_one_experiment(X, Y, layer_dims, lr, num_iterations, experiment="numpy-nn"):
@@ -23,6 +24,7 @@ def run_one_experiment(X, Y, layer_dims, lr, num_iterations, experiment="numpy-n
             layers_dims=layer_dims,
             learning_rate=lr,
             num_iterations=num_iterations,
+            print_cost=True,
         )
 
         # Log metrics computed at each step
@@ -72,8 +74,13 @@ def mlflow_sweep(X, Y):
         [12288, 50, 2, 1],
         [12288, 10, 6, 4, 1],
     ]
-    iters = 10
+    iters = 5000
 
     for layer_dims_option in layer_dims_options:
         for lr in lr_options:
             run_one_experiment(X, Y, layer_dims_option, lr, iters, experiment="numpy-nn")
+
+
+if __name__ == "__main__":
+    X, Y = create_data(folder_pos="data/pom", folder_neg="data/nopom")
+    mlflow_sweep(X, Y)
