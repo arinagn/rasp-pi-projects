@@ -59,3 +59,21 @@ def run_one_experiment(X, Y, layer_dims, lr, num_iterations, experiment="numpy-n
         mlflow.set_tag("run_ts", time.strftime("%Y-%m-%d %H:%M:%S"))
 
         return params, costs
+
+
+def mlflow_sweep(X, Y):
+    """Defines grid-search over learning rate and NN architecture.
+
+    The output is logged to MLflow Tracking Server on localhost.
+    """
+    lr_options = [0.001, 0.01, 0.05]
+    layer_dims_options = [
+        [12288, 1000, 1],
+        [12288, 50, 2, 1],
+        [12288, 10, 6, 4, 1],
+    ]
+    iters = 10
+
+    for layer_dims_option in layer_dims_options:
+        for lr in lr_options:
+            run_one_experiment(X, Y, layer_dims_option, lr, iters, experiment="numpy-nn")
