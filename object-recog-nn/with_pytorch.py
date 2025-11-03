@@ -1,8 +1,10 @@
 """Contains the PyTorch implementation of the same L-layer Neural Network."""
 
+import torch
 import torch.nn as nn
 import torch.optim as optim
 from dnn_utils import LAYER_DIMS
+from image_preprocess import create_data
 
 
 class LLayerNN(nn.Module):
@@ -96,11 +98,14 @@ def L_layer_nn_model_torch(
         if print_cost and (i % 100 == 0 or i == num_iterations - 1):
             print(f"Cost after iteration {i}: {loss.item():.6f}")
 
+    return model
+
 
 if __name__ == "__main__":
-    import torch
+    X, Y = create_data(folder_pos="data/pom", folder_neg="data/nopom")
+    X = torch.from_numpy(X).float()
+    Y = torch.from_numpy(Y).float()
 
-    X = torch.randn(100, 12288)
-    Y = torch.randint(0, 2, (100, 1)).float()
+    model = L_layer_nn_model_torch(X.T, Y.T, print_cost=True)
 
-    L_layer_nn_model_torch(X, Y, print_cost=True)
+    torch.save(model.state_dict(), "pytorch_params.pth")
