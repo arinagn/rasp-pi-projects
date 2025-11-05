@@ -49,10 +49,16 @@ class ScratchNeuralNet(mlflow.pyfunc.PythonModel):
 
 if __name__ == "__main__":
     mlflow.set_experiment("trial_model_registry")
+
     with mlflow.start_run() as run:
+        numpy_model_instance = ScratchNeuralNet()
+        input_example = np.random.randint(
+            low=0, high=256, size=(480, 640, 3), dtype=np.uint8
+        )
+        prediction_example = numpy_model_instance.predict(None, input_example)
         mlflow.pyfunc.log_model(
             name="scratch-neural-net",
-            python_model=ScratchNeuralNet(),
+            python_model=numpy_model_instance,
             artifacts={"params_path": "object-recog-nn/nn_params.npz"},
             registered_model_name="scratch-neural-net",
         )
