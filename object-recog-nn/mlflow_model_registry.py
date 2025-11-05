@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import mlflow
 import mlflow.pyfunc
+from mlflow.models.signature import infer_signature
 from dnn_utils import l_layer_model_forward
 from image_preprocess import IMG_SIZE
 
@@ -52,10 +53,14 @@ if __name__ == "__main__":
 
     with mlflow.start_run() as run:
         numpy_model_instance = ScratchNeuralNet()
+
         input_example = np.random.randint(
             low=0, high=256, size=(480, 640, 3), dtype=np.uint8
         )
+
         prediction_example = numpy_model_instance.predict(None, input_example)
+
+        inferred_signature = infer_signature(input_example, prediction_example)
         mlflow.pyfunc.log_model(
             name="scratch-neural-net",
             python_model=numpy_model_instance,
