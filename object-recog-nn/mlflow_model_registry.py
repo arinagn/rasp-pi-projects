@@ -58,7 +58,7 @@ if __name__ == "__main__":
             low=0, high=256, size=(480, 640, 3), dtype=np.uint8
         )
 
-        prediction_example = numpy_model_instance.predict(None, input_example)
+        prediction_example = 1
 
         inferred_signature = infer_signature(input_example, prediction_example)
 
@@ -68,12 +68,15 @@ if __name__ == "__main__":
             "dependencies": [
                 "python=3.12",
                 "pip",
-                {"pip": ["mlflow", "numpy", "opencv-python"]},
+                {"pip": ["mlflow", "numpy", "opencv-python", "cloudpickle"]},
             ],
         }
         mlflow.pyfunc.log_model(
             name="scratch-neural-net",
             python_model=numpy_model_instance,
             artifacts={"params_path": "object-recog-nn/nn_params.npz"},
+            conda_env=conda_env,
+            signature=inferred_signature,
+            input_example=input_example,
             registered_model_name="scratch-neural-net",
         )
