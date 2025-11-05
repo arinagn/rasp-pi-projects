@@ -61,6 +61,16 @@ if __name__ == "__main__":
         prediction_example = numpy_model_instance.predict(None, input_example)
 
         inferred_signature = infer_signature(input_example, prediction_example)
+
+        conda_env = {
+            "name": "mlflow-env",
+            "channels": ["defaults"],
+            "dependencies": [
+                "python=3.12",
+                "pip",
+                {"pip": ["mlflow", "numpy", "opencv-python"]},
+            ],
+        }
         mlflow.pyfunc.log_model(
             name="scratch-neural-net",
             python_model=numpy_model_instance,
