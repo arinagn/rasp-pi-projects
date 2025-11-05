@@ -33,7 +33,7 @@ class ScratchNeuralNet(mlflow.pyfunc.PythonModel):
     """
 
     def load_context(self, context):
-        """Tells MLflow how to load the param file and use to initalise model."""
+        """Instructions on how to load the param file and use to initalise model."""
         params = np.load(context.artifacts["params_path"])
         self.params = {key: params[key] for key in params}
 
