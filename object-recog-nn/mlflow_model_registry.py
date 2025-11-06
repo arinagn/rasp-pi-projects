@@ -71,6 +71,12 @@ if __name__ == "__main__":
                 {"pip": ["mlflow", "numpy", "opencv-python", "cloudpickle"]},
             ],
         }
+
+        custom_code_paths = [
+            "object-recog-nn/dnn_utils.py",
+            "object-recog-nn/image_preprocess.py",
+        ]
+
         mlflow.pyfunc.log_model(
             name="scratch-neural-net",
             python_model=numpy_model_instance,
@@ -79,4 +85,8 @@ if __name__ == "__main__":
             signature=inferred_signature,
             input_example=input_example,
             registered_model_name="scratch-neural-net",
+            code_paths=custom_code_paths,
         )
+        # once model registered, deploy it to local server via CLI:
+        # mlflow models serve -m runs:/<run_id>/model
+        # get predictions via curl -x POST
