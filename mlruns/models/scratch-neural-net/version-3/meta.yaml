@@ -1,0 +1,15 @@
+creation_timestamp: 1762376626318
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1762376626318
+model_id: m-f139a02981d8470ab164702071b5a99d
+name: scratch-neural-net
+run_id: 79538d99717f4b69833e246c1a98a1fa
+run_link: null
+source: models:/m-f139a02981d8470ab164702071b5a99d
+status: READY
+status_message: null
+storage_location: file:///Users/arina_home/Desktop/dev/projects/rasp-pi-projects/mlruns/264414925225527291/models/m-f139a02981d8470ab164702071b5a99d/artifacts
+user_id: null
+version: 3
